@@ -46,7 +46,7 @@
   (timef/unparse (timef/formatter "HH:mm dd.MM.yy")
                  (time/date-time v)))
 
-(defn sjoin [coll] (s/join " " coll))
+(defn sjoin [coll] (s/join " " (remove nil? coll)))
 (defn sfilter [pred coll] (seq (filter pred coll)))
 
 (def fst first)
