@@ -54,3 +54,11 @@
 
 (defn next-cyclic [idx seq]
   (nth seq (mod (inc idx) (count seq))))
+
+(defn spiegel [s]
+  (reduce str
+          (map (fn [c]
+                 (if (in? [\space \newline] c)
+                   c
+                   (->> c int dec char)))
+               (->> s char-array chars))))
