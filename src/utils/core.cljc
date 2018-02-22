@@ -19,6 +19,10 @@
      (println (str "dbg: (def " (quote ~body) " " x#")"))
      x#))
 
+(defmacro trace
+  [& params]
+  `(let [x# ~params] (println '~params "=" x#) x#))
+
 (defn in?
   "true if seq contains elm"
   [seq elm]
