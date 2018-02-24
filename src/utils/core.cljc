@@ -14,9 +14,16 @@
   `(let [x# ~body]
      x#))
 
-(defmacro dbg [body]
+(defmacro dbgv [body]
+  "debug val"
   `(let [x# ~body]
-     (println (str "dbg: (def " (quote ~body) " " x#")"))
+     (println (str "dbgv: (def " (quote ~body) " " x# ")"))
+     x#))
+
+(defmacro dbgt [body]
+  "debug type"
+  `(let [x# ~body]
+     (println (str "dbgt: (type " (quote ~body) ") = " (type x#)))
      x#))
 
 (defmacro trace
