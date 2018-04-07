@@ -67,3 +67,10 @@
   (nth seq (mod (inc idx) (count seq))))
 
 (defn not-empty? [coll] (boolean (seq coll)))
+
+(defn pwd
+  "Print user home and current working directory"
+  []
+  (println "(System/getProperty \"user.dir\")" (System/getProperty "user.dir"))
+  (println "(-> (java.io.File. \".\") .getAbsolutePath)" (-> (java.io.File. ".") .getAbsolutePath)))
+
