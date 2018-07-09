@@ -59,9 +59,20 @@
 
 (defn sjoin [coll] (s/join " " (remove nil? coll)))
 (defn sfilter [pred coll] (seq (filter pred coll)))
+(defn split
+  "Like clojure.string/split just swap param order"
+  ([re s] (s/split s re))
+  ([re limit s] (s/split s re limit)))
 
 (def fst first)
 (def snd second)
+
+(defn _0th [coll] (nth 0 coll))
+(defn _1th [coll] (nth 1 coll))
+(defn _2th [coll] (nth 2 coll))
+(defn _3th [coll] (nth 3 coll))
+(defn _4th [coll] (nth 4 coll))
+(defn _5th [coll] (nth 5 coll))
 
 (defn next-cyclic [idx seq]
   (nth seq (mod (inc idx) (count seq))))
