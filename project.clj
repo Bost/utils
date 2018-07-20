@@ -1,4 +1,4 @@
-(defproject utils "0.8.0"
+(defproject utils "0.8.1"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
