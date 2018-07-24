@@ -1,8 +1,10 @@
 (ns utils.core
   (:require
    [clojure.string :as s]
-   [utils.core :as ut]
-   [clj-time.coerce :as tc]))
+   ;; clj-time is for JVM, not for clojurescript
+   #_[clj-time.coerce :as tc]
+   #_[clj-time-ext.core :as tce]
+   ))
 
 (def t true)
 (def f false)
@@ -95,9 +97,10 @@
   (println "(-> (java.io.File. \".\") .getAbsolutePath)"
            (-> (java.io.File. ".") .getAbsolutePath)))
 
-(defn file-ago-diff
+;; usable only on the JVM, not on clojurescript
+#_(defn file-ago-diff
   "e.g. (file-ago-diff filepath {:verbose true :desc-length :short})"
   [filepath {:keys [verbose desc-length]
              :or {verbose false desc-length :long} :as prm-map}]
-  (ut/ago-diff (tc/from-long (.lastModified (new java.io.File filepath)))
-               prm-map))
+  (tce/ago-diff (tc/from-long (.lastModified (new java.io.File filepath)))
+                prm-map))
