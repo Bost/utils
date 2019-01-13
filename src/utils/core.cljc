@@ -97,10 +97,3 @@
   (println "(-> (java.io.File. \".\") .getAbsolutePath)"
            (-> (java.io.File. ".") .getAbsolutePath)))
 
-;; usable only on the JVM, not on clojurescript
-#_(defn file-ago-diff
-  "e.g. (file-ago-diff filepath {:verbose true :desc-length :short})"
-  [filepath {:keys [verbose desc-length]
-             :or {verbose false desc-length :long} :as prm-map}]
-  (tce/ago-diff (tc/from-long (.lastModified (new java.io.File filepath)))
-                prm-map))
