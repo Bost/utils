@@ -6,13 +6,9 @@
   :dependencies
   [[org.clojure/clojure "1.10.0"]
    [org.clojure/core.rrb-vector "0.0.13"]
-   ;; java bytecode, no clojurescript
-   [clj-time-ext "0.0.0-31-0x6e56"]
+   ;; clj-time-ext as well as clj-time produces java bytecode, no clojurescript
+   [clj-time-ext "0.0.0-32-0x20c9"]
    ;; File system utilities
    [me.raynes/fs "1.4.6"]]
-  :plugins
-  [
-   ;; Drive leiningen project version from git instead of the other way around
-   [com.roomkey/lein-v "7.0.0"]
-   ;; collection of nREPL middleware designed to enhance CIDER
-   [cider/cider-nrepl "0.18.0" :exclusions [org.clojure/tools.nrepl]]])
+   ;; can't use the lein-v from ~/.lein/profiles.clj
+  :plugins [[com.roomkey/lein-v "7.0.0"]])
