@@ -6,6 +6,7 @@
 (def t true)
 (def f false)
 (def id identity)
+(def i identity)
 
 (defmacro dbi
   "Identity macro. Conveniently toggle the dbg macro"
@@ -19,14 +20,23 @@
   `(let [x# ~body]
      x#))
 
+(defmacro dbg [body]
+  "debug val. Doesn't work properly for threading macros"
+  `(let [x# ~body]
+     (println (str "dbg: (def " (quote ~body) " " x# ")"))
+     x#))
+
+(def spy "An alternative to the dbg macro"
+  (fn [$] (println "spy:" $) $))
+
 (defmacro dbgv [body]
-  "debug val"
+  "debug val. Doesn't work properly for threading macros"
   `(let [x# ~body]
      (println (str "dbgv: (def " (quote ~body) " " x# ")"))
      x#))
 
 (defmacro dbgt [body]
-  "debug type"
+  "debug type. Doesn't work properly for threading macros"
   `(let [x# ~body]
      (println (str "dbgt: (type " (quote ~body) ") = " (type x#)))
      x#))
