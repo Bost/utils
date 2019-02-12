@@ -11,4 +11,11 @@
    ;; File system utilities
    [me.raynes/fs "1.4.6"]]
    ;; can't use the lein-v from ~/.lein/profiles.clj
-  :plugins [[com.roomkey/lein-v "7.0.0"]])
+  :java-source-paths ["java"]
+  :plugins
+  [
+   ;; Drive leiningen project version from git instead of the other way around
+   [com.roomkey/lein-v "7.0.0"]
+   ;; autorecompile changed java files
+   [lein-virgil "0.1.9"]
+   ])
