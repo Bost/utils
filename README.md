@@ -1,13 +1,13 @@
-# utils
-
-A Clojure library designed to ... well, that part is up to you.
-
 ## Usage
 
 ```
 lein install
 ```
+TODO deploy to clojars
 
+```clj
+[utils.core :refer [dbgv dbgi]]
+```
 ## License
 
 Copyright © 2017 FIXME
