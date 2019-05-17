@@ -86,7 +86,12 @@
 (defn next-cyclic [idx seq]
   (nth seq (mod (inc idx) (count seq))))
 
-(defn not-empty? [coll] (boolean (seq coll)))
+#_(defn not-empty? [coll] (boolean (seq coll)))
+(def not-empty? (complement empty?))
+
+(defn coll-and-empty? [x] (and (coll? x) (empty? x)))
+
+(defn coll-and-not-empty? [x] (and (coll? x) (not-empty? x)))
 
 (defn pwd
   "Print user home and current working directory"
