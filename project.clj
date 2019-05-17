@@ -1,4 +1,4 @@
-(defproject utils :lein-v
+(defproject org.clojars.bost/utils :lein-v
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
