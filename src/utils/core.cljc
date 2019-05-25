@@ -31,6 +31,16 @@
   See https://curiousprogrammer.net/2017/11/20/clojure-tip-of-the-day-episode-3-threading-macros-tracing/"
   (fn [$] (println "spy:" $) $))
 
+(def spyv
+  "An alternative to the dbg macro. Also for threading macros tracing.
+  See https://curiousprogrammer.net/2017/11/20/clojure-tip-of-the-day-episode-3-threading-macros-tracing/"
+  (fn [$] (println "spyv:" $) $))
+
+(def spyt
+  "An alternative to the dbg macro. Also for threading macros tracing.
+  See https://curiousprogrammer.net/2017/11/20/clojure-tip-of-the-day-episode-3-threading-macros-tracing/"
+(fn [$] (println "spyt: " (type $)) $))
+
 (defmacro dbgv [body]
   "debug val. Doesn't work properly for threading macros"
   `(let [x# ~body]
