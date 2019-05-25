@@ -26,7 +26,9 @@
      (println (str "dbg: (def " (quote ~body) " " x# ")"))
      x#))
 
-(def spy "An alternative to the dbg macro"
+(def spy
+  "An alternative to the dbg macro. Also for threading macros tracing.
+  See https://curiousprogrammer.net/2017/11/20/clojure-tip-of-the-day-episode-3-threading-macros-tracing/"
   (fn [$] (println "spy:" $) $))
 
 (defmacro dbgv [body]
