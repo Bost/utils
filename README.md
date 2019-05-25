@@ -2,9 +2,8 @@
 
 ```
 lein install
+lein deploy clojars
 ```
-TODO deploy to clojars
-
 ```clj
 [utils.core :refer [dbgv dbgi]]
 ```
