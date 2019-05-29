@@ -88,13 +88,6 @@
 (defn next-cyclic [idx seq]
   (nth seq (mod (inc idx) (count seq))))
 
-#_(defn not-empty? [coll] (boolean (seq coll)))
-(def not-empty? (complement empty?))
-
-(defn coll-and-empty? [x] (and (coll? x) (empty? x)))
-
-(defn coll-and-not-empty? [x] (and (coll? x) (not-empty? x)))
-
 (defn pwd
   "Print user home and current working directory"
   []
@@ -104,4 +97,97 @@
                    (System/getProperty "user.dir")))
   (println "(-> (java.io.File. \".\") .getAbsolutePath)"
            (-> (java.io.File. ".") .getAbsolutePath)))
+
+#_(defn not-empty? [coll] (boolean (seq coll)))
+(def not-empty? (complement empty?))
+
+(defn coll-and-empty? [x] (and (coll? x) (empty? x)))
+
+(defn coll-and-not-empty? [x] (and (coll? x) (not-empty? x)))
+
+(defn meaningfull? [v]
+  (or
+   ;; (boolean v) is true and v is not a collection. Note (boolean 0) => true
+   (and v (not (coll? v)))
+   (seq v)  ;; true if v is a not-empty collection
+   (and (string? v) (not (clojure.string/blank? v)))))
+
+(defn cleanup-hm [hm]
+  (->> hm
+       (keep (fn [[k v]] (if (meaningfull? v)
+                           {k v})))
+       (into {})))
+
+(defn coll?--and--not-empty [v] (and (coll? v) (not-empty v)))
+(defn coll?--and--empty?[v] (and (coll? v) (empty? v)))
+(defn if-coll?-then-count [v] (if (coll? v) (count v)))
+
+(defn whatisit
+  "A.k.a:
+  What is it?
+  Qu'est-ce que c'est?
+  Was ist das?
+  Cos'è?
+  Что́ это?
+  O que é isso?"
+  [unknown]
+  (->>
+   #_[(fn coll?--count [v] (if (coll? v) (count v)))]
+   [
+    #_(fn [n] (if (clojure.zip/node n) (clojure.zip/branch? n)))
+    #_clojure.zip/end?
+
+    seq
+    boolean
+    type
+    coll?
+
+    coll?--and--not-empty
+    coll?--and--empty?
+    if-coll?-then-count
+
+    future?
+    (fn future?--and--future-done? [f] (and (future? f) (future-done? f)))
+    (fn future?--and--future-cancelled? [f] (and (future? f) (future-cancelled? f)))
+    (fn future?--and--realized? [f] (and (future? f) (realized? f)))
+
+    distinct?
+    sequential? associative? sorted? counted? reversible?
+    bytes?
+    indexed? seqable?
+    any?
+    fn?
+    ifn?
+    var?
+    (fn var?--and--bount? [v] (and (var? v) (bound? v)))
+    (fn var?--and--bount?--and-thread-bound? [v] (and (var? v) (bound? v) (thread-bound? v)))
+    list?
+
+    vector? set? map? seq? record? map-entry?
+    class?
+    volatile?
+    number?
+    (fn number?--and--zero? [n] (and (number? n) (zero? n)))
+    true? false? nil? some?
+    string?
+    (fn string?--and--blank? [s] (and (string? s) (clojure.string/blank? s)))
+    clojure.spec.alpha/spec?
+    special-symbol?
+    rational?
+    integer?
+    ratio? decimal? float? double? int? nat-int? neg-int?
+    pos-int? keyword? symbol? ident? qualified-ident? qualified-keyword?
+    qualified-symbol? simple-ident? simple-keyword? simple-symbol? boolean?
+    inst? uri? uuid?
+    ]
+   (keep (fn [test-fn]
+           (if-let [result (test-fn unknown)]
+             {test-fn result})))))
+
+(comment
+  (cotoje (quote ()))
+  (cotoje (quote (quote ())))
+  (cotoje 1)
+  (cotoje [])
+  (cotoje ""))
 
