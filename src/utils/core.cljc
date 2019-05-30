@@ -137,12 +137,12 @@
     #_(fn [n] (if (clojure.zip/node n) (clojure.zip/branch? n)))
     #_clojure.zip/end?
 
-    seq
+    ;; seq
     boolean
     type
     coll?
 
-    coll?--and--not-empty
+    ;; coll?--and--not-empty
     coll?--and--empty?
     if-coll?-then-count
 
