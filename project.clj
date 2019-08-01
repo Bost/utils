@@ -4,8 +4,8 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies
-  [[org.clojure/clojure "1.10.0"]
-   [org.clojure/core.rrb-vector "0.0.13"]
+  [[org.clojure/clojure "1.10.1"]
+   [org.clojure/core.rrb-vector "0.0.14"]
    ;; clj-time-ext as well as clj-time produces java bytecode, no clojurescript
    [clj-time-ext "0.0.0-34-0x7939"]
    ;; File system utilities
