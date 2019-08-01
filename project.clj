@@ -19,6 +19,7 @@
    ;; autorecompile changed java files
    [lein-virgil "0.1.9"]
    ]
+  ;; enter user/password on the command line
   :deploy-repositories [["clojars" {:url "https://repo.clojars.org"
                                     :sign-releases false}]]
   )
