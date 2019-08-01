@@ -10,7 +10,7 @@
    [clj-time-ext "0.0.0-34-0x7939"]
    ;; File system utilities
    [me.raynes/fs "1.4.6"]]
-   ;; can't use the lein-v from ~/.lein/profiles.clj
+  ;; can't use the lein-v from ~/.lein/profiles.clj
   :java-source-paths ["java"]
   :plugins
   [
@@ -18,4 +18,7 @@
    [com.roomkey/lein-v "7.0.0"]
    ;; autorecompile changed java files
    [lein-virgil "0.1.9"]
-   ])
+   ]
+  :deploy-repositories [["clojars" {:url "https://repo.clojars.org"
+                                    :sign-releases false}]]
+  )
