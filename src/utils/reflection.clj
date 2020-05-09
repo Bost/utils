@@ -122,7 +122,8 @@
 (.instanceFn1 (new org.domain.Main) "foo")
 ;; => instanceFn0: arg0: foo
 
-;; compiler emit warnings when reflection is needed to resolve Java method calls or field accesses
+;; compiler emit warnings when reflection is needed to resolve Java method calls
+;; or field accesses
 ;; (set! *warn-on-reflection* true)
 (set! *warn-on-reflection* false)
 
@@ -144,6 +145,13 @@
      (.getName class)
      (str method)
      (to-array args))))
+
+;; TODO accessing static method - see:
+;; => Math/ceil  ; leads to a syntax error
+;; https://groups.google.com/forum/#!topic/clojure/nH-E5uD8CY4
+;; https://stackoverflow.com/a/8623141
+;; ​(defmacro static-fn [f] `(fn [x#] (~f x#)))
+;; (static-fn Math/ceil) ;; => #function[...]
 
 ((get-static-fn org.domain.Main "staticFn0"))
 ;; => staticFn0: no-args
