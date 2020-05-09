@@ -1,8 +1,7 @@
 ## Usage
 
-```
-lein install
-lein deploy clojars
+```bash
+lein do install, deploy clojars
 ```
 ```clj
 [utils.core :refer :all]
