@@ -58,9 +58,9 @@
   `(let [x# ~params] (println '~params "=" x#) x#))
 
 (defn in?
-  "true if seq contains elm"
-  [seq elm]
-  (boolean (some (fn [e] (= elm e)) seq)))
+  "true if `sequence` contains `elem`. See (contains? (set sequence) elem)"
+  [sequence elem]
+  (boolean (some (fn [e] (= elem e)) sequence)))
 
 (defn union-re-patterns
   "Union regex patters"
