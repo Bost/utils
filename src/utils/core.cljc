@@ -201,3 +201,11 @@
   (cotoje [])
   (cotoje ""))
 
+(defn transpose
+  "Transpose matrix. See also https://github.com/mikera/core.matrix"
+  [m]
+  (apply mapv vector m))
+
+#_(let [v [[:a :b :c] [0 1 2]]]
+  (= v
+     (->> v (transpose) (transpose))))
