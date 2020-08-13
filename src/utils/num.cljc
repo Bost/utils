@@ -1,13 +1,17 @@
-(ns utils.num)
+(ns utils.num
+  (:require
+   [utils.reflection :as r]))
+
+(defmacro static-fn [f] `(fn [x#] (~f x#)))
 
 (defn round
   "TODO consider using :pre / :hooks. See `wrap-fn-pre-post-hooks`"
   ([x] (round :normal x))
   ([mode x]
    (let [f (case mode
-             :high    (static-fn Math/ceil)
-             :low     (static-fn Math/floor)
-             :normal  (static-fn Math/round)
+             :high    (r/static-fn Math/ceil)
+             :low     (r/static-fn Math/floor)
+             :normal  (r/static-fn Math/round)
              (throw (Exception.
                      "ERROR: round [:high|:low|:normal] <VALUE>")))]
      (long (f x)))))

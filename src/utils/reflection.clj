@@ -146,6 +146,8 @@
      (str method)
      (to-array args))))
 
+(defmacro static-fn [f] `(fn [x#] (~f x#)))
+
 ;; TODO accessing static method - see:
 ;; => Math/ceil  ; leads to a syntax error
 ;; https://groups.google.com/forum/#!topic/clojure/nH-E5uD8CY4
