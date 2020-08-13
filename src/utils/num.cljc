@@ -2,8 +2,6 @@
   (:require
    [utils.reflection :as r]))
 
-(defmacro static-fn [f] `(fn [x#] (~f x#)))
-
 (defn round
   "TODO consider using :pre / :hooks. See `wrap-fn-pre-post-hooks`"
   ([x] (round :normal x))
