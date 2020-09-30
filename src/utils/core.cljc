@@ -5,8 +5,23 @@
 
 (def t true)
 (def f false)
-(def id identity)
 (def i identity)
+
+(defn id
+  "Identity function returning a list of its args:
+    (id)           ; => ()
+    (id 1)         ; => (1)
+    (id 1 2)       ; => (1 2)
+
+  Compare with:
+    (identity)     ; => exception
+    (identity 1)   ; => 1
+    (identity 1 2) ; => exception
+  "
+  [& args]
+  (case (count args)
+    0 '()
+    args))
 
 (defmacro dbi
   "Identity macro. Conveniently toggle the dbg macro"
