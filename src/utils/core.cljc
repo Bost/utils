@@ -88,12 +88,12 @@
 (def fst first)
 (def snd second)
 
-(defn _0th [coll] (nth 0 coll))
-(defn _1th [coll] (nth 1 coll))
-(defn _2th [coll] (nth 2 coll))
-(defn _3th [coll] (nth 3 coll))
-(defn _4th [coll] (nth 4 coll))
-(defn _5th [coll] (nth 5 coll))
+(defn _0th [coll] (nth coll 0))
+(defn _1th [coll] (nth coll 1))
+(defn _2th [coll] (nth coll 2))
+(defn _3th [coll] (nth coll 3))
+(defn _4th [coll] (nth coll 4))
+(defn _5th [coll] (nth coll 5))
 
 (defn next-cyclic [idx seq]
   (nth seq (mod (inc idx) (count seq))))
@@ -109,7 +109,9 @@
            (-> (java.io.File. ".") .getAbsolutePath)))
 
 #_(defn not-empty? [coll] (boolean (seq coll)))
-(def not-empty? (complement empty?))
+(def not-empty?
+  "TODO create test to compare the implementations"
+  (complement empty?))
 
 (defn coll-and-empty? [x] (and (coll? x) (empty? x)))
 

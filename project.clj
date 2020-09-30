@@ -14,7 +14,7 @@
   :java-source-paths ["java"]
   :plugins
   [
-   ;; Drive leiningen project version from git instead of the other way around
+   ;; leiningen project versions from git
    [com.roomkey/lein-v "7.2.0"]
    ;; autorecompile changed java files
    [lein-virgil "0.1.9"]
