@@ -1,6 +1,7 @@
 (ns utils.core
+  "See https://github.com/weavejester/medley/blob/master/src/medley/core.cljc"
   (:require
-   [clojure.string :as s]
+   [clojure.string :as cstr]
    ))
 
 (def t true)
@@ -19,58 +20,9 @@
     (identity 1 2) ; => exception
   "
   [& args]
-  (case (count args)
+  (case (count args) ;; TODO (if (seq args) args '())
     0 '()
     args))
-
-(defmacro dbi
-  "Identity macro. Conveniently toggle the dbg macro"
-  [body]
-  `(let [x# ~body]
-     x#))
-
-(defmacro dbgi
-  "Identity macro. Conveniently toggle the dbgv macro"
-  [body]
-  `(let [x# ~body]
-     x#))
-
-(defmacro dbg [body]
-  "debug val. Doesn't work properly for threading macros"
-  `(let [x# ~body]
-     (println (str "dbg: (def " (quote ~body) " " x# ")"))
-     x#))
-
-(def spy
-  "An alternative to the dbg macro. Also for threading macros tracing.
-  See https://curiousprogrammer.net/2017/11/20/clojure-tip-of-the-day-episode-3-threading-macros-tracing/"
-  (fn [$] (println "spy:" $) $))
-
-(def spyv
-  "An alternative to the dbg macro. Also for threading macros tracing.
-  See https://curiousprogrammer.net/2017/11/20/clojure-tip-of-the-day-episode-3-threading-macros-tracing/"
-  (fn [$] (println "spyv:" $) $))
-
-(def spyt
-  "An alternative to the dbg macro. Also for threading macros tracing.
-  See https://curiousprogrammer.net/2017/11/20/clojure-tip-of-the-day-episode-3-threading-macros-tracing/"
-(fn [$] (println "spyt: " (type $)) $))
-
-(defmacro dbgv [body]
-  "debug val. Doesn't work properly for threading macros"
-  `(let [x# ~body]
-     (println (str "dbgv: (def " (quote ~body) " " x# ")"))
-     x#))
-
-(defmacro dbgt [body]
-  "debug type. Doesn't work properly for threading macros"
-  `(let [x# ~body]
-     (println (str "dbgt: (type " (quote ~body) ") = " (type x#)))
-     x#))
-
-(defmacro trace
-  [& params]
-  `(let [x# ~params] (println '~params "=" x#) x#))
 
 (defn in?
   "true if `sequence` contains `elem`. See (contains? (set sequence) elem)"
@@ -80,25 +32,29 @@
 (defn union-re-patterns
   "Union regex patters"
   [patterns]
-  (re-pattern (s/join "|" (map str patterns))))
+  (re-pattern (cstr/join "|" (map str patterns))))
 
-;; TODO inclausestr: improve surrounding by "'"
 (defn inclause
-  "The content of '... in (...)' must be separated by comma and space"
-  [{:keys [elems contract] :as prm}]
+  "In SQL, the content of '... in (...)' must be separated by commas and spaces"
+  [{:keys [elems contract]}]
   #_(every? contract elems)
   (let [collstr [] ;; list of contracts for strings/varchars
         separator (if (in? collstr contract) "','" ", ")
-        ret (clojure.string/join separator elems)]
-    (let [s (if (in? collstr contract) (str "'" ret "'") ret)]
-      (clojure.string/replace s #"(([\d']+, ){12})" "$1\n"))))
+        ret (cstr/join separator elems)
+        s (if (in? collstr contract) (format "'%s'" ret) ret)]
+    (cstr/replace s #"(([\d']+, ){12})" "$1\n")))
 
-(defn sjoin [coll] (s/join " " (remove nil? coll)))
+(defn sjoin
+  ([coll] (sjoin " " coll))
+  ([coll separator] (cstr/join separator (remove nil? coll))))
+
 (defn sfilter [pred coll] (seq (filter pred coll)))
+
 (defn split
-  "Like clojure.string/split just swap param order"
-  ([re s] (s/split s re))
-  ([re limit s] (s/split s re limit)))
+  "Like cstr/split just swap the order of parameters.
+  TODO try to write split as a macro"
+  ([re s] (cstr/split s re))
+  ([re limit s] (cstr/split s re limit)))
 
 (def fst first)
 (def snd second)
@@ -137,26 +93,19 @@
    ;; (boolean v) is true and v is not a collection. Note (boolean 0) => true
    (and v (not (coll? v)))
    (seq v)  ;; true if v is a not-empty collection
-   (and (string? v) (not (clojure.string/blank? v)))))
+   (and (string? v) (not (cstr/blank? v)))))
 
 (defn cleanup-hm [hm]
   (->> hm
-       (keep (fn [[k v]] (if (meaningfull? v)
-                           {k v})))
+       (keep (fn [[k v]] (when (meaningfull? v)
+                          {k v})))
        (into {})))
 
 (defn coll?--and--not-empty [v] (and (coll? v) (not-empty v)))
-(defn coll?--and--empty?[v] (and (coll? v) (empty? v)))
-(defn if-coll?-then-count [v] (if (coll? v) (count v)))
+(defn coll?--and--empty?    [v] (and (coll? v) (empty? v)))
+(defn if-coll?-then-count   [v] (when (coll? v) (count v)))
 
-(defn whatisit
-  "A.k.a:
-  What is it?
-  Qu'est-ce que c'est?
-  Was ist das?
-  Cos'è?
-  Что́ это?
-  O que é isso?"
+(defn what-is
   [unknown]
   (->>
    #_[(fn coll?--count [v] (if (coll? v) (count v)))]
@@ -197,7 +146,7 @@
     (fn number?--and--zero? [n] (and (number? n) (zero? n)))
     true? false? nil? some?
     string?
-    (fn string?--and--blank? [s] (and (string? s) (clojure.string/blank? s)))
+    (fn string?--and--blank? [s] (and (string? s) (cstr/blank? s)))
     clojure.spec.alpha/spec?
     special-symbol?
     rational?
@@ -212,11 +161,11 @@
              {test-fn result})))))
 
 (comment
-  (cotoje (quote ()))
-  (cotoje (quote (quote ())))
-  (cotoje 1)
-  (cotoje [])
-  (cotoje ""))
+  (what-is (quote ()))
+  (what-is (quote (quote ())))
+  (what-is 1)
+  (what-is [])
+  (what-is ""))
 
 (defn transpose
   "Transpose matrix. See also https://github.com/mikera/core.matrix"
@@ -226,3 +175,31 @@
 #_(let [v [[:a :b :c] [0 1 2]]]
   (= v
      (->> v (transpose) (transpose))))
+
+#_(defn deep-merge
+    "Recursively merges maps.
+  Thanks to https://dnaeon.github.io/recursively-merging-maps-in-clojure/"
+    [& maps]
+    (letfn [(m [& xs]
+              (if (some #(and (map? %) (not (record? %))) xs)
+                (apply merge-with m xs)
+                (last xs)))]
+      (reduce m maps)))
+
+(defn deep-merge
+  "Recursively merges maps. TODO see https://github.com/weavejester/medley
+  Thanks to https://gist.github.com/danielpcox/c70a8aa2c36766200a95#gistcomment-2711849"
+  [& maps]
+  (apply merge-with (fn [& args]
+                      (if (every? map? args)
+                        (apply deep-merge args)
+                        (last args)))
+         maps))
+
+#_(defn deep-merge
+    "Might be buggy.
+See https://gist.github.com/danielpcox/c70a8aa2c36766200a95#gistcomment-2845162"
+    [a & maps]
+    (if (map? a)
+      (apply merge-with deep-merge a maps)
+      (apply merge-with deep-merge maps)))
