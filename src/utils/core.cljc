@@ -196,6 +196,11 @@
                         (last args)))
          maps))
 
+(defn last-index-of [coll elem]
+  ((comp last
+         (partial keep-indexed (fn [i v] (when (= elem v) i))))
+   coll))
+
 #_(defn deep-merge
     "Might be buggy.
 See https://gist.github.com/danielpcox/c70a8aa2c36766200a95#gistcomment-2845162"
