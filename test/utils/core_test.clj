@@ -1,5 +1,6 @@
 (ns utils.core-test
   (:require
+   [clojure.string :as cstr]
    [clojure.test :refer :all]
    [utils.core :refer :all]
    [utils.reflection :refer :all]))
@@ -68,3 +69,7 @@
   ;; => main: args: foo, bar
   ;; => nil
   )
+
+(deftest test-sjoin
+  (is (= (sjoin ["foo" "bar"])
+         (cstr/join " " ["foo" "bar"]))))

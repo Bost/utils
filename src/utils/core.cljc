@@ -45,7 +45,8 @@
     (cstr/replace s #"(([\d']+, ){12})" "$1\n")))
 
 (defn sjoin
-  ([coll] (sjoin " " coll))
+  "Attention! Order of args differs from cstr/join"
+  ([coll] (sjoin coll " "))
   ([coll separator] (cstr/join separator (remove nil? coll))))
 
 (defn sfilter [pred coll] (seq (filter pred coll)))
