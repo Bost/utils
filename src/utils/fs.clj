@@ -2,7 +2,7 @@
   (:require
    [utils.core :as ut]
    [clj-time.coerce :as tc]
-   [clj-time-ext.core :as tce]
+   [clj-time.bost :as tce]
    ;; https://github.com/Raynes/fs
    [me.raynes.fs :as rfs]))
 
