@@ -7,7 +7,7 @@
   [[org.clojure/clojure "1.10.2"]
    [org.clojure/core.rrb-vector "0.1.2"]
    ;; clj-time-ext as well as clj-time produces java bytecode, no clojurescript
-   [org.clojars.bost/clj-time "0.6.0-288-0xce29"]
+   [org.clojars.bost/clj-time "0.6.0-289-0xe68a"]
    ;; File system utilities
    [me.raynes/fs "1.4.6"]]
   ;; can't use the lein-v from ~/.lein/profiles.clj
