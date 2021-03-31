@@ -197,10 +197,25 @@
                         (last args)))
          maps))
 
-(defn last-index-of [coll elem]
-  ((comp last
-         (partial keep-indexed (fn [i v] (when (= elem v) i))))
-   coll))
+(defn last-index-of
+  "start-from backwards"
+  ([coll elem] (last-index-of coll 0 elem))
+  ([coll start-from elem]
+   (let [start-from-back (- (dec (count coll)) start-from)]
+     ((comp last
+            (partial keep-indexed
+                     (fn [i v] (when (and (= elem v)
+                                         (<= i start-from-back)) i))))
+      coll))))
+
+(defn first-index-of
+  ([coll elem] (first-index-of coll 0 elem))
+  ([coll start-from elem]
+   ((comp
+     first
+     (partial keep-indexed
+              (fn [i v] (when (and (= elem v) (>= i start-from)) i))))
+    coll)))
 
 #_(defn deep-merge
     "Might be buggy.
