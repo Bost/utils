@@ -9,3 +9,8 @@ pom.xml.asc
 /.nrepl-port
 .hgignore
 .hg/
+/.settings/
+/.project
+/.lsp/
+/.clj-kondo/
+/.classpath
