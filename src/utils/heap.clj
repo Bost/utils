@@ -1,6 +1,5 @@
 (ns corona.heap
   (:require [jvm-alloc-rate-meter.core :as ameter]
-            [corona.common :as com]
             [taoensso.timbre :as timbre]))
 
 (defn format-bytes
@@ -17,7 +16,8 @@
       (format "%.1f %s" (float n) suffix))))
 
 (defn fmap
-  "See clojure.algo.generic.functor/fmap"
+  "Related to Generic functor interface ???
+  See clojure.algo.generic.functor/fmap"
   [f m]
   (into (empty m) (for [[k v] m] [k (f v)])))
 
