@@ -217,6 +217,17 @@
               (fn [i v] (when (and (= elem v) (>= i start-from)) i))))
     coll)))
 
+(def fns [(fn [] (println "A") true)
+          (fn [] (println "B") true)
+          (fn [] (println "C") true)])
+
+(defn cont-functions [fns]
+  (loop [fs fns]
+    (when fs
+      (when-let [f (first fs)]
+        (when (f)
+          (recur (rest fs)))))))
+
 #_(defn deep-merge
     "Might be buggy.
 See https://gist.github.com/danielpcox/c70a8aa2c36766200a95#gistcomment-2845162"
