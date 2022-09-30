@@ -41,7 +41,9 @@
   (let [collstr [] ;; list of contracts for strings/varchars
         separator (if (in? collstr contract) "','" ", ")
         ret (cstr/join separator elems)
-        s (if (in? collstr contract) (format "'%s'" ret) ret)]
+        s (if (in? collstr contract)
+            ;; Use of undeclared Var utils.core/format
+            (format "'%s'" ret) ret)]
     (cstr/replace s #"(([\d']+, ){12})" "$1\n")))
 
 (defn sjoin
@@ -78,6 +80,7 @@
      :clj (println "(System/getProperty \"user.dir\")"
                    (System/getProperty "user.dir")))
   (println "(-> (java.io.File. \".\") .getAbsolutePath)"
+           ;; Use of undeclared Var utils.core/java
            (-> (java.io.File. ".") .getAbsolutePath)))
 
 #_(defn not-empty? [coll] (boolean (seq coll)))
@@ -123,24 +126,46 @@
     coll?--and--empty?
     if-coll?-then-count
 
+    ;; Use of undeclared Var utils.core/future?
     future?
-    (fn future?--and--future-done? [f] (and (future? f) (future-done? f)))
-    (fn future?--and--future-cancelled? [f] (and (future? f) (future-cancelled? f)))
-    (fn future?--and--realized? [f] (and (future? f) (realized? f)))
+    (fn future?--and--future-done? [f]
+      (and
+       ;; Use of undeclared Var utils.core/future?
+       (future? f)
+       ;; Use of undeclared Var utils.core/future-done?
+       (future-done? f)))
+    (fn future?--and--future-cancelled? [f]
+      (and
+       ;; Use of undeclared Var utils.core/future?
+       (future? f)
+       ;; Use of undeclared Var utils.core/future-cancelled?
+       (future-cancelled? f)))
+    (fn future?--and--realized? [f]
+      (and
+       ;; Use of undeclared Var utils.core/future?
+       (future? f) (realized? f)))
 
     distinct?
     sequential? associative? sorted? counted? reversible?
+    ;; Use of undeclared Var utils.core/bytes?
     bytes?
     indexed? seqable?
     any?
     fn?
     ifn?
     var?
+    ;; Use of undeclared Var utils.core/bound?
     (fn var?--and--bount? [v] (and (var? v) (bound? v)))
-    (fn var?--and--bount?--and-thread-bound? [v] (and (var? v) (bound? v) (thread-bound? v)))
+    (fn var?--and--bount?--and-thread-bound? [v]
+      (and (var? v)
+           ;; Use of undeclared Var utils.core/bound?
+           (bound? v)
+           ;; Use of undeclared Var utils.core/thread-bound?
+           (thread-bound? v)))
     list?
 
     vector? set? map? seq? record? map-entry?
+    ;; Use of undeclared Var utils.core/class?
     class?
     volatile?
     number?
@@ -148,11 +173,17 @@
     true? false? nil? some?
     string?
     (fn string?--and--blank? [s] (and (string? s) (cstr/blank? s)))
+    ;; No such namespace: clojure.spec.alpha, could not locate clojure/spec/alpha.cljs, clojure/spec/alpha.cljc, or JavaScript source providing "clojure.spec.alpha" ;; Use of undeclared Var clojure.spec.alpha/spec?
     clojure.spec.alpha/spec?
     special-symbol?
+    ;; Use of undeclared Var utils.core/rational?
     rational?
     integer?
-    ratio? decimal? float? double? int? nat-int? neg-int?
+    ;; Use of undeclared Var utils.core/ratio?
+    ratio?
+    ;; Use of undeclared Var utils.core/decimal?
+    decimal?
+    float? double? int? nat-int? neg-int?
     pos-int? keyword? symbol? ident? qualified-ident? qualified-keyword?
     qualified-symbol? simple-ident? simple-keyword? simple-symbol? boolean?
     inst? uri? uuid?
