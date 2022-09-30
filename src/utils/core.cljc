@@ -266,3 +266,126 @@ See https://gist.github.com/danielpcox/c70a8aa2c36766200a95#gistcomment-2845162"
     (if (map? a)
       (apply merge-with deep-merge a maps)
       (apply merge-with deep-merge maps)))
+
+(defn all-equal?
+  "Accepts pairs:
+  (all-equal? [1 1] [2 2])         ;; => true
+  (all-equal? [1 1] [2 3])         ;; => false
+  (all-equal? [1 1] [3 3])         ;; => true
+  (all-equal? [1 1] [3 3] [4])     ;; => true
+  (all-equal? [1 1] [3 3] [4 nil]) ;; => false
+  "
+  [& args]
+  ((comp
+    (partial every? true?) ;; i.e. (reduce and [...])
+    (partial map (partial apply =)))
+   args))
+
+(defn between
+  "TODO consider checking (<= beg end)
+  (between 5 3 [0 1 2 3 4 5]) => ()
+
+Examples:
+  ;; Classic call:
+  (between 0 0 [0 1 2 3 4 5]) => ()
+  (between 0 1 [0 1 2 3 4 5]) => (0)
+  (between 3 5 [0 1 2 3 4 5]) => (3 4)
+
+  ;; Named parameters with variable order:
+  (between :beg 2 :end 4 :coll [0 1 2 3 4 5])   => (2 3)
+  (between :coll [0 1 2 3 4 5] :end 4 :beg 2)   => (2 3)
+  ;; Named parameters with variable order even in a hash-map:
+  (between {:beg 2 :end 4 :coll [0 1 2 3 4 5]}) => (2 3)
+
+  ;; If the last parameter is the collection then the ':coll' keyword can be
+  ;; omitted
+  (between :beg 2 :end 4 [0 1 2 3 4 5]) => (2 3)
+  (between :end 4 :beg 2 [0 1 2 3 4 5]) => (2 3)
+
+  (between :colls [0 1 2 3 4 5] :end 4 :beg 2) => Exception (spelling)
+  "
+  ([beg end coll] ((comp (partial drop beg)
+                         (partial take end))
+                   coll))
+
+  ;; Let's be somewhat smarter - assuming last parameter is the collection
+  ([k1 v1 k2 v2 v3] (between k1 v1 k2 v2 :coll v3))
+
+  ([k1 v1 k2 v2 k3 v3]
+   ;; make sure there the keywords are not miss-spelled
+   (let [b :beg e :end c :coll]
+     (cond
+       (all-equal? [k1 b] [k2 e] [k3 c])
+       (between v1 v2 v3)
+
+       (all-equal? [k1 b] [k2 c] [k3 e])
+       (between v1 v3 v2)
+
+       (all-equal? [k1 e] [k2 c] [k3 b])
+       (between v3 v1 v2)
+
+       (all-equal? [k1 e] [k2 b] [k3 c])
+       (between v2 v1 v3)
+
+       (all-equal? [k1 c] [k2 b] [k3 e])
+       (between v2 v3 v1)
+
+       (all-equal? [k1 c] [k2 e] [k3 b])
+       (between v3 v2 v1)
+
+       :else
+       (throw (IllegalArgumentException.
+               (print-str "Some keywords are miss-spelled:" k1 k2 k3))))))
+
+  ([{:keys [beg end coll] :as prm}] (between beg end coll)))
+
+(defn select-keys
+  "Examples:
+  ;; Handy when `partial` is applied:
+  (map (partial select-keys :keyseq [:a :b] :map)
+     [{:a 11 :b 12 :c nil}
+      {:a 21 :b 22 :c nil}])
+  ;; => ({:a 11, :b 12} {:a 21, :b 22})
+
+  ;; Classic call:
+  (select-keys {:a 11 :b 12 :c nil} [:a :b])                => {:a 11, :b 12}
+
+  ;; Named parameters with variable order:
+  (select-keys :map {:a 11 :b 12 :c nil} :keyseq [:a :b])   => {:a 11, :b 12}
+  (select-keys :keyseq [:a :b] :map {:a 11 :b 12 :c nil})   => {:a 11, :b 12}
+  ;; Named parameters with variable order even in a hash-map:
+  (select-keys {:map {:a 11 :b 12 :c nil} :keyseq [:a :b]}) => {:a 11, :b 12}
+
+  ;; If the last parameter is the map then the ':map' keyword can be
+  ;; omitted...
+  (select-keys :keyseq [:a :b] {:a 11 :b 12 :c nil})
+  ;; ... and it works even when `partial` is applied:
+  (map (partial select-keys :keyseq [:a :b] :map)
+     [{:a 11 :b 12 :c nil}
+      {:a 21 :b 22 :c nil}])
+  ;; => ({:a 11, :b 12} {:a 21, :b 22})
+
+  ;; Mixed call doesn't work:
+  (select-keys {:a 11 :b 12 :c nil} :keyseq [:a :b]) => ArityException
+  (select-keys :map {:a 11 :b 12 :c nil} [:a :b])    => ArityException
+  "
+  ([{:keys [map keyseq] :as prm}]
+   (select-keys map keyseq))
+  ([k1 v1 v2]
+   ;; let's be somewhat smarter - assuming last parameter is the map
+   (select-keys k1 v1 :map v2))
+  ([k1 v1 k2 v2]
+   ;; make sure there the keywords are not miss-spelled
+   (let [m :map ks :keyseq]
+     (cond
+       (all-equal? [k1 m] [k2 ks])
+       (select-keys v1 v2)
+
+       (all-equal? [k1 ks] [k2 m])
+       (select-keys v2 v1)
+
+       :else
+       (throw (IllegalArgumentException.
+               (print-str "Some keywords are miss-spelled:" k1 k2))))))
+  ([map keyseq]
+   (clojure.core/select-keys map keyseq)))
