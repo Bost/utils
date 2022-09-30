@@ -5,7 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
   :dependencies
-  [[org.clojure/clojure "1.10.2"]
+  [[org.clojure/clojure "1.11.1"]
    ;; clj-time-ext as well as clj-time produces java bytecode, no clojurescript
    [org.clojars.bost/clj-time "0.6.0-289-0xe68a"]
    ;; File system utilities
