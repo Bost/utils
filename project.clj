@@ -16,10 +16,11 @@
   [
    ;; leiningen project versions from git
    [com.roomkey/lein-v "7.2.0"]
+
    ;; autorecompile changed java files
    ;; 'lein test' doesn't work with when lein-virgil is plugged-in
    ;; See also https://github.com/ztellman/virgil/pull/31
-   #_[lein-virgil "0.1.9"]
+   [org.clojars.bost/virgil "0.0.0-72-0x260b"]
    ]
   :deploy-repositories [["clojars" {:url "https://repo.clojars.org"
                                     :username "bost"
