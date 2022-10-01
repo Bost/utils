@@ -22,6 +22,8 @@
    ;; See also https://github.com/ztellman/virgil/pull/31
    [org.clojars.bost/virgil "0.0.0-72-0x260b"]
    ]
+  ;; https://github.com/practicalli/clojure-deps-edn
+  ;; clojure -M:project/clojars project.jar
   :deploy-repositories [["clojars" {:url "https://repo.clojars.org"
                                     :username "bost"
                                     :password :env/CLOJARS_TOKEN
