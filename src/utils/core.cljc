@@ -267,13 +267,14 @@ See https://gist.github.com/danielpcox/c70a8aa2c36766200a95#gistcomment-2845162"
       (apply merge-with deep-merge a maps)
       (apply merge-with deep-merge maps)))
 
-(defn all-equal?
-  "Accepts pairs:
-  (all-equal? [1 1] [2 2])         ;; => true
-  (all-equal? [1 1] [2 3])         ;; => false
-  (all-equal? [1 1] [3 3])         ;; => true
-  (all-equal? [1 1] [3 3] [4])     ;; => true
-  (all-equal? [1 1] [3 3] [4 nil]) ;; => false
+(defn all-pairwise-equal?
+  "Elements of every pair equal.
+  Accepts pairs:
+  (all-pairwise-equal? [1 1] [2 2])         ;; => true
+  (all-pairwise-equal? [1 1] [2 3])         ;; => false
+  (all-pairwise-equal? [1 1] [3 3])         ;; => true
+  (all-pairwise-equal? [1 1] [3 3] [4])     ;; => true
+  (all-pairwise-equal? [1 1] [3 3] [4 nil]) ;; => false
   "
   [& args]
   ((comp
@@ -315,22 +316,22 @@ Examples:
    ;; make sure there the keywords are not miss-spelled
    (let [b :beg e :end c :coll]
      (cond
-       (all-equal? [k1 b] [k2 e] [k3 c])
+       (all-pairwise-equal? [k1 b] [k2 e] [k3 c])
        (between v1 v2 v3)
 
-       (all-equal? [k1 b] [k2 c] [k3 e])
+       (all-pairwise-equal? [k1 b] [k2 c] [k3 e])
        (between v1 v3 v2)
 
-       (all-equal? [k1 e] [k2 c] [k3 b])
+       (all-pairwise-equal? [k1 e] [k2 c] [k3 b])
        (between v3 v1 v2)
 
-       (all-equal? [k1 e] [k2 b] [k3 c])
+       (all-pairwise-equal? [k1 e] [k2 b] [k3 c])
        (between v2 v1 v3)
 
-       (all-equal? [k1 c] [k2 b] [k3 e])
+       (all-pairwise-equal? [k1 c] [k2 b] [k3 e])
        (between v2 v3 v1)
 
-       (all-equal? [k1 c] [k2 e] [k3 b])
+       (all-pairwise-equal? [k1 c] [k2 e] [k3 b])
        (between v3 v2 v1)
 
        :else
@@ -378,10 +379,10 @@ Examples:
    ;; make sure there the keywords are not miss-spelled
    (let [m :map ks :keyseq]
      (cond
-       (all-equal? [k1 m] [k2 ks])
+       (all-pairwise-equal? [k1 m] [k2 ks])
        (select-keys v1 v2)
 
-       (all-equal? [k1 ks] [k2 m])
+       (all-pairwise-equal? [k1 ks] [k2 m])
        (select-keys v2 v1)
 
        :else
